@@ -6,6 +6,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 7
+    ordering = ('-id',)
 
     def get_next_link(self):
         if not self.page.has_next():
@@ -36,3 +37,4 @@ class StandardMinSizeResultsSetPagination(StandardResultsSetPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 10
+

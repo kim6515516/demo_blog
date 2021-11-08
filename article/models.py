@@ -31,14 +31,20 @@ class BaseModel(models.Model):
         self.save(update_fields=['deleted_at'])
 
 
-class Article(BaseModel):
+class Article(models.Model):
     title = models.CharField(verbose_name='제목', max_length=255)
     content = models.TextField(verbose_name='내용')
 
+    class Meta:
+        ordering = ['-id']
 
-class Comment(BaseModel):
+
+class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(verbose_name='내용', max_length=255)
+
+    class Meta:
+        ordering = ['-id']
 
 
 

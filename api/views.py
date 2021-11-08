@@ -2,7 +2,8 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
 from api.paginations import StandardResultsSetPagination
-from api.serializers import ArticleCommonSerializer, CommentCommonSerializer, CommentUpdateSerializer
+from api.serializers import ArticleCommonSerializer, CommentCommonSerializer, CommentUpdateSerializer, \
+    ArticleUpdateSerializer
 from article.models import Article, Comment
 
 
@@ -18,6 +19,25 @@ class ArticleApiView(GenericViewSet,
 
     serializer_class = ArticleCommonSerializer
     pagination_class = StandardResultsSetPagination
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.serializer_action_classes = {
+            # 'list': CommentListSerializer,
+            'create': ArticleUpdateSerializer,
+            # 'retrieve': CommentSerializer,
+            'update': ArticleUpdateSerializer,
+            # 'partial_update': CommentSerializer,
+            # 'destroy': CommentSerializer,
+        }
+
+    def get_serializer_class(self, *args, **kwargs):
+        """Instantiate the list of serializers per action from class attribute (must be defined)."""
+        kwargs['partial'] = True
+        try:
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super().get_serializer_class()
 
 
 class ArticleCommentApiView(GenericViewSet,

@@ -42,3 +42,13 @@ class ArticleCommonSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
+
+class ArticleUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Article
+        fields = ('id', 'title', 'content')
+        read_only_fields = ('id',)
+        write_only_fields = ('title', 'content')
+
